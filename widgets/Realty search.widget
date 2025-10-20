@@ -1,0 +1,379 @@
+{
+  "version": "1.0",
+  "name": "Realty search",
+  "template": "{\"type\":\"Card\",\"size\":\"lg\",\"children\":[{\"type\":\"Col\",\"gap\":3,\"children\":[{\"type\":\"Title\",\"value\":\"Realty listings\",\"size\":\"sm\",\"children\":[]},{\"type\":\"Form\",\"onSubmitAction\":{\"type\":\"realty.search\"},\"children\":[{\"type\":\"Row\",\"gap\":2,\"wrap\":\"wrap\",\"children\":[{\"type\":\"Input\",\"name\":\"filters.location\",\"placeholder\":\"City, State\",\"defaultValue\":{{ (filters.location) | tojson }},\"size\":\"sm\",\"pill\":true,\"children\":[]},{\"type\":\"Select\",\"name\":\"filters.type\",\"options\":{{ (filters.typeOptions) | tojson }},\"defaultValue\":{{ (filters.type) | tojson }},\"size\":\"sm\",\"pill\":true,\"children\":[]},{\"type\":\"Select\",\"name\":\"filters.category\",\"options\":{{ (filters.categoryOptions) | tojson }},\"defaultValue\":{{ (filters.category) | tojson }},\"size\":\"sm\",\"pill\":true,\"children\":[]},{\"type\":\"Button\",\"submit\":true,\"label\":\"Search\",\"style\":\"primary\",\"iconStart\":\"search\",\"children\":[]}]}]},{\"type\":\"Divider\",\"children\":[]},{\"type\":\"ListView\",\"children\":[{%- set _c -%}{%-for item in listings -%},{\"type\":\"ListViewItem\",\"key\":{{ (item.id) | tojson }},\"gap\":3,\"onClickAction\":{\"type\":\"realty.open\",\"payload\":{\"id\":{{ (item.id) | tojson }}}},\"children\":[{\"type\":\"Image\",\"src\":{{ (item.image) | tojson }},\"alt\":{{ (item.title) | tojson }},\"size\":64,\"radius\":\"sm\",\"children\":[]},{\"type\":\"Col\",\"gap\":1,\"children\":[{\"type\":\"Row\",\"children\":[{\"type\":\"Text\",\"value\":{{ (item.title) | tojson }},\"size\":\"sm\",\"weight\":\"semibold\",\"maxLines\":1,\"children\":[]},{\"type\":\"Spacer\",\"children\":[]},{\"type\":\"Text\",\"value\":{{ (item.price) | tojson }},\"size\":\"sm\",\"weight\":\"semibold\",\"color\":\"emphasis\",\"children\":[]}]},{\"type\":\"Text\",\"value\":{{ (item.description) | tojson }},\"size\":\"sm\",\"color\":\"secondary\",\"maxLines\":2,\"children\":[]}]}]}{%-endfor-%}{%- endset -%}{{- (_c[1:] if _c and _c[0] == ',' else _c) -}}]}]}]}",
+  "jsonSchema": {
+    "$schema": "https://json-schema.org/draft/2020-12/schema",
+    "$id": "widget",
+    "type": "object",
+    "properties": {
+      "filters": {
+        "type": "object",
+        "properties": {
+          "location": {
+            "type": "string"
+          },
+          "type": {
+            "type": "string"
+          },
+          "category": {
+            "type": "string"
+          },
+          "typeOptions": {
+            "type": "array",
+            "items": {
+              "type": "object",
+              "properties": {
+                "value": {
+                  "type": "string"
+                },
+                "label": {
+                  "type": "string"
+                }
+              },
+              "required": [
+                "value",
+                "label"
+              ],
+              "additionalProperties": false
+            },
+            "minItems": 2
+          },
+          "categoryOptions": {
+            "type": "array",
+            "items": {
+              "type": "object",
+              "properties": {
+                "value": {
+                  "type": "string"
+                },
+                "label": {
+                  "type": "string"
+                }
+              },
+              "required": [
+                "value",
+                "label"
+              ],
+              "additionalProperties": false
+            },
+            "minItems": 5
+          }
+        },
+        "required": [
+          "location",
+          "type",
+          "category",
+          "typeOptions",
+          "categoryOptions"
+        ],
+        "additionalProperties": false
+      },
+      "listings": {
+        "type": "array",
+        "items": {
+          "type": "object",
+          "properties": {
+            "id": {
+              "type": "string"
+            },
+            "title": {
+              "type": "string"
+            },
+            "price": {
+              "type": "string"
+            },
+            "description": {
+              "type": "string"
+            },
+            "image": {
+              "type": "string",
+              "format": "uri"
+            }
+          },
+          "required": [
+            "id",
+            "title",
+            "price",
+            "description",
+            "image"
+          ],
+          "additionalProperties": false
+        },
+        "minItems": 3
+      }
+    },
+    "required": [
+      "filters",
+      "listings"
+    ],
+    "additionalProperties": false
+  },
+  "outputJsonPreview": {
+    "type": "Card",
+    "size": "md",
+    "children": [
+      {
+        "type": "Col",
+        "gap": 3,
+        "children": [
+          {
+            "type": "Title",
+            "value": "Realty listings",
+            "size": "sm"
+          },
+          {
+            "type": "Form",
+            "onSubmitAction": {
+              "type": "realty.search"
+            },
+            "children": [
+              {
+                "type": "Row",
+                "gap": 2,
+                "wrap": "wrap",
+                "children": [
+                  {
+                    "type": "Input",
+                    "name": "filters.location",
+                    "placeholder": "City, State",
+                    "defaultValue": "",
+                    "size": "sm",
+                    "pill": true
+                  },
+                  {
+                    "type": "Select",
+                    "name": "filters.type",
+                    "options": [
+                      {
+                        "value": "rent",
+                        "label": "Rent"
+                      },
+                      {
+                        "value": "sell",
+                        "label": "Sell"
+                      }
+                    ],
+                    "defaultValue": "rent",
+                    "size": "sm",
+                    "pill": true
+                  },
+                  {
+                    "type": "Select",
+                    "name": "filters.category",
+                    "options": [
+                      {
+                        "value": "any",
+                        "label": "Any"
+                      },
+                      {
+                        "value": "studio",
+                        "label": "Studio"
+                      },
+                      {
+                        "value": "1br",
+                        "label": "1 Bedroom"
+                      },
+                      {
+                        "value": "2br",
+                        "label": "2 Bedroom"
+                      },
+                      {
+                        "value": "3br",
+                        "label": "3 Bedroom+"
+                      }
+                    ],
+                    "defaultValue": "any",
+                    "size": "sm",
+                    "pill": true
+                  },
+                  {
+                    "type": "Button",
+                    "submit": true,
+                    "label": "Search",
+                    "style": "primary",
+                    "iconStart": "search"
+                  }
+                ]
+              }
+            ]
+          },
+          {
+            "type": "Divider"
+          },
+          {
+            "type": "ListView",
+            "children": [
+              {
+                "type": "ListViewItem",
+                "key": "l1",
+                "gap": 3,
+                "onClickAction": {
+                  "type": "realty.open",
+                  "payload": {
+                    "id": "l1"
+                  }
+                },
+                "children": [
+                  {
+                    "type": "Image",
+                    "src": "https://upload.wikimedia.org/wikipedia/commons/0/0e/Calhoun_living_room.jpg",
+                    "alt": "Bright 1BR with lake view",
+                    "size": 64,
+                    "radius": "sm"
+                  },
+                  {
+                    "type": "Col",
+                    "gap": 1,
+                    "children": [
+                      {
+                        "type": "Row",
+                        "children": [
+                          {
+                            "type": "Text",
+                            "value": "Bright 1BR with lake view",
+                            "size": "sm",
+                            "weight": "semibold",
+                            "maxLines": 1
+                          },
+                          {
+                            "type": "Spacer"
+                          },
+                          {
+                            "type": "Text",
+                            "value": "$2,950/mo",
+                            "size": "sm",
+                            "weight": "semibold",
+                            "color": "emphasis"
+                          }
+                        ]
+                      },
+                      {
+                        "type": "Text",
+                        "value": "Top-floor unit with floor-to-ceiling windows and in-unit laundry.",
+                        "size": "sm",
+                        "color": "secondary",
+                        "maxLines": 2
+                      }
+                    ]
+                  }
+                ]
+              },
+              {
+                "type": "ListViewItem",
+                "key": "l2",
+                "gap": 3,
+                "onClickAction": {
+                  "type": "realty.open",
+                  "payload": {
+                    "id": "l2"
+                  }
+                },
+                "children": [
+                  {
+                    "type": "Image",
+                    "src": "https://upload.wikimedia.org/wikipedia/commons/f/fd/Modular_Exterior.jpg",
+                    "alt": "Cedar-clad 3BR modular home",
+                    "size": 64,
+                    "radius": "sm"
+                  },
+                  {
+                    "type": "Col",
+                    "gap": 1,
+                    "children": [
+                      {
+                        "type": "Row",
+                        "children": [
+                          {
+                            "type": "Text",
+                            "value": "Cedar-clad 3BR modular home",
+                            "size": "sm",
+                            "weight": "semibold",
+                            "maxLines": 1
+                          },
+                          {
+                            "type": "Spacer"
+                          },
+                          {
+                            "type": "Text",
+                            "value": "$485,000",
+                            "size": "sm",
+                            "weight": "semibold",
+                            "color": "emphasis"
+                          }
+                        ]
+                      },
+                      {
+                        "type": "Text",
+                        "value": "Open-plan living, wraparound deck, and 2-car garage on a wooded lot.",
+                        "size": "sm",
+                        "color": "secondary",
+                        "maxLines": 2
+                      }
+                    ]
+                  }
+                ]
+              },
+              {
+                "type": "ListViewItem",
+                "key": "l3",
+                "gap": 3,
+                "onClickAction": {
+                  "type": "realty.open",
+                  "payload": {
+                    "id": "l3"
+                  }
+                },
+                "children": [
+                  {
+                    "type": "Image",
+                    "src": "https://upload.wikimedia.org/wikipedia/commons/1/1e/AIMCO_apartment_interior.jpg",
+                    "alt": "Cozy 2BR near parks",
+                    "size": 64,
+                    "radius": "sm"
+                  },
+                  {
+                    "type": "Col",
+                    "gap": 1,
+                    "children": [
+                      {
+                        "type": "Row",
+                        "children": [
+                          {
+                            "type": "Text",
+                            "value": "Cozy 2BR near parks",
+                            "size": "sm",
+                            "weight": "semibold",
+                            "maxLines": 1
+                          },
+                          {
+                            "type": "Spacer"
+                          },
+                          {
+                            "type": "Text",
+                            "value": "$2,350/mo",
+                            "size": "sm",
+                            "weight": "semibold",
+                            "color": "emphasis"
+                          }
+                        ]
+                      },
+                      {
+                        "type": "Text",
+                        "value": "Updated kitchen, fireplace, and a private balcony in a quiet community.",
+                        "size": "sm",
+                        "color": "secondary",
+                        "maxLines": 2
+                      }
+                    ]
+                  }
+                ]
+              }
+            ]
+          }
+        ]
+      }
+    ]
+  },
+  "encodedWidget": "eyJpZCI6IjQ1YWZlMDZmLTJjYjAtNGJjNC04Y2IxLTdjMDE4OTc2NGU0OSIsIm5hbWUiOiJSZWFsdHkgc2VhcmNoIiwidmlldyI6IjxDYXJkIHNpemU9XCJtZFwiPlxuICA8Q29sIGdhcD17M30-XG4gICAgPFRpdGxlIHZhbHVlPVwiUmVhbHR5IGxpc3RpbmdzXCIgc2l6ZT1cInNtXCIgLz5cbiAgICA8Rm9ybSBvblN1Ym1pdEFjdGlvbj17eyB0eXBlOiBcInJlYWx0eS5zZWFyY2hcIiB9fT5cbiAgICAgIDxSb3cgZ2FwPXsyfSB3cmFwPVwid3JhcFwiPlxuICAgICAgICA8SW5wdXQgbmFtZT1cImZpbHRlcnMubG9jYXRpb25cIiBwbGFjZWhvbGRlcj1cIkNpdHksIFN0YXRlXCIgZGVmYXVsdFZhbHVlPXtmaWx0ZXJzLmxvY2F0aW9ufSBzaXplPVwic21cIiBwaWxsIC8-XG4gICAgICAgIDxTZWxlY3QgbmFtZT1cImZpbHRlcnMudHlwZVwiIG9wdGlvbnM9e2ZpbHRlcnMudHlwZU9wdGlvbnN9IGRlZmF1bHRWYWx1ZT17ZmlsdGVycy50eXBlfSBzaXplPVwic21cIiBwaWxsIC8-XG4gICAgICAgIDxTZWxlY3QgbmFtZT1cImZpbHRlcnMuY2F0ZWdvcnlcIiBvcHRpb25zPXtmaWx0ZXJzLmNhdGVnb3J5T3B0aW9uc30gZGVmYXVsdFZhbHVlPXtmaWx0ZXJzLmNhdGVnb3J5fSBzaXplPVwic21cIiBwaWxsIC8-XG4gICAgICAgIDxCdXR0b24gc3VibWl0IGxhYmVsPVwiU2VhcmNoXCIgc3R5bGU9XCJwcmltYXJ5XCIgaWNvblN0YXJ0PVwic2VhcmNoXCIgLz5cbiAgICAgIDwvUm93PlxuICAgIDwvRm9ybT5cbiAgICA8RGl2aWRlciAvPlxuICAgIDxMaXN0Vmlldz5cbiAgICAgIHtsaXN0aW5ncy5tYXAoKGl0ZW0pID0-IChcbiAgICAgICAgPExpc3RWaWV3SXRlbSBrZXk9e2l0ZW0uaWR9IGdhcD17M30gb25DbGlja0FjdGlvbj17eyB0eXBlOiBcInJlYWx0eS5vcGVuXCIsIHBheWxvYWQ6IHsgaWQ6IGl0ZW0uaWQgfSB9fT5cbiAgICAgICAgICA8SW1hZ2Ugc3JjPXtpdGVtLmltYWdlfSBhbHQ9e2l0ZW0udGl0bGV9IHNpemU9ezY0fSByYWRpdXM9XCJzbVwiIC8-XG4gICAgICAgICAgPENvbCBnYXA9ezF9PlxuICAgICAgICAgICAgPFJvdz5cbiAgICAgICAgICAgICAgPFRleHQgdmFsdWU9e2l0ZW0udGl0bGV9IHNpemU9XCJzbVwiIHdlaWdodD1cInNlbWlib2xkXCIgbWF4TGluZXM9ezF9IC8-XG4gICAgICAgICAgICAgIDxTcGFjZXIgLz5cbiAgICAgICAgICAgICAgPFRleHQgdmFsdWU9e2l0ZW0ucHJpY2V9IHNpemU9XCJzbVwiIHdlaWdodD1cInNlbWlib2xkXCIgY29sb3I9XCJlbXBoYXNpc1wiIC8-XG4gICAgICAgICAgICA8L1Jvdz5cbiAgICAgICAgICAgIDxUZXh0IHZhbHVlPXtpdGVtLmRlc2NyaXB0aW9ufSBzaXplPVwic21cIiBjb2xvcj1cInNlY29uZGFyeVwiIG1heExpbmVzPXsyfSAvPlxuICAgICAgICAgIDwvQ29sPlxuICAgICAgICA8L0xpc3RWaWV3SXRlbT5cbiAgICAgICkpfVxuICAgIDwvTGlzdFZpZXc-XG4gIDwvQ29sPlxuPC9DYXJkPiIsImRlZmF1bHRTdGF0ZSI6eyJmaWx0ZXJzIjp7ImxvY2F0aW9uIjoiIiwidHlwZSI6InJlbnQiLCJjYXRlZ29yeSI6ImFueSIsInR5cGVPcHRpb25zIjpbeyJ2YWx1ZSI6InJlbnQiLCJsYWJlbCI6IlJlbnQifSx7InZhbHVlIjoic2VsbCIsImxhYmVsIjoiU2VsbCJ9XSwiY2F0ZWdvcnlPcHRpb25zIjpbeyJ2YWx1ZSI6ImFueSIsImxhYmVsIjoiQW55In0seyJ2YWx1ZSI6InN0dWRpbyIsImxhYmVsIjoiU3R1ZGlvIn0seyJ2YWx1ZSI6IjFiciIsImxhYmVsIjoiMSBCZWRyb29tIn0seyJ2YWx1ZSI6IjJiciIsImxhYmVsIjoiMiBCZWRyb29tIn0seyJ2YWx1ZSI6IjNiciIsImxhYmVsIjoiMyBCZWRyb29tKyJ9XX0sImxpc3RpbmdzIjpbeyJpZCI6ImwxIiwidGl0bGUiOiJCcmlnaHQgMUJSIHdpdGggbGFrZSB2aWV3IiwicHJpY2UiOiIkMiw5NTAvbW8iLCJkZXNjcmlwdGlvbiI6IlRvcC1mbG9vciB1bml0IHdpdGggZmxvb3ItdG8tY2VpbGluZyB3aW5kb3dzIGFuZCBpbi11bml0IGxhdW5kcnkuIiwiaW1hZ2UiOiJodHRwczovL3VwbG9hZC53aWtpbWVkaWEub3JnL3dpa2lwZWRpYS9jb21tb25zLzAvMGUvQ2FsaG91bl9saXZpbmdfcm9vbS5qcGcifSx7ImlkIjoibDIiLCJ0aXRsZSI6IkNlZGFyLWNsYWQgM0JSIG1vZHVsYXIgaG9tZSIsInByaWNlIjoiJDQ4NSwwMDAiLCJkZXNjcmlwdGlvbiI6Ik9wZW4tcGxhbiBsaXZpbmcsIHdyYXBhcm91bmQgZGVjaywgYW5kIDItY2FyIGdhcmFnZSBvbiBhIHdvb2RlZCBsb3QuIiwiaW1hZ2UiOiJodHRwczovL3VwbG9hZC53aWtpbWVkaWEub3JnL3dpa2lwZWRpYS9jb21tb25zL2YvZmQvTW9kdWxhcl9FeHRlcmlvci5qcGcifSx7ImlkIjoibDMiLCJ0aXRsZSI6IkNvenkgMkJSIG5lYXIgcGFya3MiLCJwcmljZSI6IiQyLDM1MC9tbyIsImRlc2NyaXB0aW9uIjoiVXBkYXRlZCBraXRjaGVuLCBmaXJlcGxhY2UsIGFuZCBhIHByaXZhdGUgYmFsY29ueSBpbiBhIHF1aWV0IGNvbW11bml0eS4iLCJpbWFnZSI6Imh0dHBzOi8vdXBsb2FkLndpa2ltZWRpYS5vcmcvd2lraXBlZGlhL2NvbW1vbnMvMS8xZS9BSU1DT19hcGFydG1lbnRfaW50ZXJpb3IuanBnIn1dfSwic3RhdGVzIjpbXX0"
+}
